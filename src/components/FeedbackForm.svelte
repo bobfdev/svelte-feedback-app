@@ -1,11 +1,9 @@
 <script>
     import {v4 as uuidv4} from 'uuid';
-    import {createEventDispatcher} from 'svelte';
+    import {FeedbackStore} from '../stores';
     import Card from './Card.svelte';
     import Button from './Button.svelte';
     import RatingSelect from './RatingSelect.svelte';
-
-    const dispatch = createEventDispatcher();
 
     let text = ''
     let rating = 10
@@ -33,7 +31,9 @@
                 rating: +rating
            }
 
-            dispatch('add-feedback', newFeedback)
+           FeedbackStore.update((currentFeedback) => {
+               return [newFeedback, ...currentFeedback]
+           })
 
             // clear form after submission
             text = ' '
@@ -43,7 +43,7 @@
 
 <Card>
         <header>
-            <h2>How would you rate your service with us?</h2>
+            <h2>How would you rate your service?</h2>
         </header>
     <form on:submit|preventDefault={handleSubmit}>
         <RatingSelect 
